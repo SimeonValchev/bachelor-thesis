@@ -1,0 +1,5 @@
+f(X,Y) -> g(X,h(Y))
+g(X,h(Y)) -> h(X)
+h(h(X)) -> X
+vars
+X
