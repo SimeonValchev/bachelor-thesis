@@ -1,5 +1,6 @@
-f(X,Y) -> g(X,h(Y))
-g(X,h(Y)) -> h(X)
-h(h(X)) -> X
+f(0) -> 1
+f(s(X)) -> g(f(X))
+g(X) -> p(X,s(X))
+f(s(X)) -> p(f(X),s(f(X)))
 vars
 X
