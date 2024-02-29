@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Term {
+public class Term{
 
     boolean encoded;
     char symbol;

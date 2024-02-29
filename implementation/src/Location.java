@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Location {
 
     Rule alpha;
@@ -29,7 +32,27 @@ public class Location {
                 return nest.getSize();
             }
         }
-        return 1;
+        return 0;
+    }
+
+    public int nextBiggestNest(Nest[] nests){
+        //ASSUMPTION: LOC IS ALWAYS ON THE RHS
+        int result = this.getSizeFromSet(nests);
+        Term right = this.getAlpha().right.subTermAt(getPosition());
+        Integer[] temp = new Integer[right.arrity];
+
+        if(right.arrity == 0){
+            return result;
+        }
+
+        for (int i = 0; i < right.arrity; i++) {
+
+                String temp_pos = getPosition().equals("eps") ? String.valueOf(i) : getPosition() + "." + i;
+                Location temp_loc = new Location(getAlpha(), false, temp_pos);
+                temp[i] = temp_loc.getSizeFromSet(nests);
+        }
+        result = Collections.max(Arrays.asList(temp));
+        return result;
     }
 
     //GETTERS AND SETTERS

@@ -1,8 +1,6 @@
-f -> g(a,b)
-g(X,X) -> h(X)
-h(b) -> n
-a -> b
-b -> c
-n -> n
+f(0) -> 1
+f(s(X)) -> g(f(X))
+g(X) -> p(X,s(X))
+f(s(X)) -> p(f(X),s(f(X)))
 vars
 X

@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class TRS extends VarsCAP {
 
@@ -10,12 +13,15 @@ public class TRS extends VarsCAP {
         this.vars = vars;
     }
 
-    //  THE _ENCODING_ IN ALL ITS GLORY AND MIGHT!
+    //     THE _ENCODING_ IN ALL ITS GLORY AND MIGHT!
     //MAY IT HAVE THE POWER TO CARRY ITS WRITER TO THE FINISH LINE
     //                 ✝ AMEN ✝
     public TRS ENCODING(){
         Location[] ENC = ENC_R();
         Nest[] NST = NST_R();
+        char[] infinite = INF_R_onlychars();
+        String[] signa = signature();
+
         for (Rule rule : this.getRules()) {
             if(rule == null){
                 continue;
@@ -23,6 +29,122 @@ public class TRS extends VarsCAP {
             rule.left = phi(rule.left, new Location(rule, true, "eps"), false, ENC, NST);
             rule.right = phi(rule.right, new Location(rule, false, "eps"), false, ENC, NST);
         }
+        /*
+
+        Rule[] added_rules = new Rule[100];
+        int counter = 1;
+        //OMISSION
+        added_rules[0] = new Rule(stringToTerm("i(X)", false), stringToTerm("X", false));
+        //PROPAGATION
+        for (String symbol : signa) {
+            if(symbol == null || symbol.charAt(2) == '0'){
+                continue;
+            }
+            if(inCharSet(symbol.charAt(0),infinite)){
+                String temp_right = "";
+                String temp_left = "";
+
+                temp_left = "i(l_" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_left += tempchar + ",";
+                }
+                temp_left += (char) 83 + ")";
+
+                temp_right = "i(l_" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_right += "i(" +tempchar + "),";
+                }
+                temp_right += "i(" + (char) 83 + "))";
+                added_rules[counter] = new Rule(stringToTerm(temp_left, false), stringToTerm(temp_right, false));
+                counter++;
+
+            }else if(inCharSet(symbol.charAt(0), sigmaD())){
+                String temp_right = "";
+                String temp_left = "";
+
+                temp_left = "i(l_" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_left += tempchar + ",";
+                }
+                temp_left += (char) 83 + ")";
+
+                temp_right = "l_" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_right += "i(" +tempchar + "),";
+                }
+                temp_right += "i(" + (char) 83 + ")";
+
+                if(symbol.charAt(2) == '0'){
+
+                }
+                added_rules[counter] = new Rule(stringToTerm(temp_left, false), stringToTerm(temp_right, false));
+                counter++;
+
+            }else{
+                String temp_right = "";
+                String temp_left = "";
+
+                temp_left = "i(" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_left += tempchar + ",";
+                }
+                temp_left += (char) 83 + ")";
+
+                temp_right = symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_right += "i(" +tempchar + "),";
+                }
+                temp_right += "i(" + (char) 83 + ")";
+
+                if(symbol.charAt(2) == '0'){
+
+                }
+                added_rules[counter] = new Rule(stringToTerm(temp_left, false), stringToTerm(temp_right, false));
+                counter++;
+            }
+        }
+        //EXECUTION
+        for (String symbol : signa) {
+            if(symbol == null){
+                continue;
+            }
+            if(inCharSet(symbol.charAt(0),sigmaD())){
+                String temp_right = "";
+                String temp_left = "";
+
+                temp_left = "i(l_" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_left += tempchar + ",";
+                }
+                temp_left += (char) 83 + ")";
+
+                temp_right = "i(" + symbol.charAt(0) + "(";
+                for (int i = 1; i < Character.getNumericValue(symbol.charAt(2)); i++) {
+                    char tempchar = (char) (83 + i);
+                    temp_right += tempchar + ",";
+                }
+                temp_right += (char) 83 + ")";
+                added_rules[counter] = new Rule(stringToTerm(temp_left, false), stringToTerm(temp_right, false));
+                counter++;
+
+            }
+        }
+
+        List<Rule> resultList = new ArrayList<>(rules.length + added_rules.length);
+        Collections.addAll(resultList, rules);
+        Collections.addAll(resultList, added_rules);
+
+        rules = resultList.toArray(new Rule[0]);
+
+         */
+
         return this;
     }
 
@@ -91,6 +213,7 @@ public class TRS extends VarsCAP {
         }else{
 
             input.setEncoded(true);
+            int potentialNest = loc.nextBiggestNest(NST);
             for (int i = 1; i < input.arrity + 1; i++) {
 
                 if(loc.position.equals("eps")){
@@ -100,7 +223,14 @@ public class TRS extends VarsCAP {
                 }
                 input.subterms[i-1] = phi(input.subterms[i-1], new Location(loc.getAlpha(), loc.left, temp_position), true, ENC, NST);
             }
-            return new Term('i',1,new Term[]{input});
+
+            //THE WAY IT WAS BEFORE
+            //return new Term('i',1,new Term[]{input});
+            Term result = new Term('i',1,new Term[]{input});
+            for (int i = 0; i < potentialNest; i++) {
+                result =  new Term('i',1,new Term[]{result});
+            }
+            return result;
 
         }
 
@@ -232,6 +362,21 @@ public class TRS extends VarsCAP {
              */
         }
         return result;
+    }
+
+    public char[] INF_R_onlychars(){
+        char[] res = new char[100];
+        int res_counter = 0;
+
+        Location[] source = INF_R();
+        for (Location loc : source) {
+            if(loc == null){
+                continue;
+            }
+            res[res_counter] = loc.symbolAtLoc();
+            res_counter++;
+        }
+        return res;
     }
 
     //THE X
@@ -491,7 +636,9 @@ public class TRS extends VarsCAP {
         int counter = 0;
 
         for (Location loc : source) {
-            if(!loc.position.equals("eps") && !loc.left &&
+            //care for eps positions?
+            //!loc.position.equals("eps") &&
+            if(!loc.left &&
                     inCharSet(loc.getAlpha().right.subTermAt(loc.position).getSymbol(), sigmaD())){
                 int temp = loc.getAlpha().right.subTermAt(loc.position).nestSize(sigmaD(),vars);
                 if(temp >= 2){
@@ -717,6 +864,105 @@ public class TRS extends VarsCAP {
             res[i] = rules[i].getLeft().getSymbol();
         }
         return res;
+    }
+
+    public String[] signature(){
+        String[] res = new String[loc_R_num()];
+        int res_counter = 0;
+
+        Location[] source = loc_R();
+        for (Location loc: source) {
+            if(loc == null){
+                continue;
+            }
+            char temp = loc.symbolAtLoc();
+            String checker = temp + "_" + (loc.left ? loc.getAlpha().left.subTermAt(loc.position).arrity : loc.getAlpha().right.subTermAt(loc.position).arrity);
+            boolean key = true;
+            for (String str : res) {
+                if(str == null){
+                    continue;
+                }
+                if (checker.equals(str)) {
+                    key = false;
+                    break;
+                }
+            }
+            if (key){
+                res[res_counter] = checker;
+                res_counter++;
+            }
+        }
+        return res;
+    }
+
+    public static Term stringToTerm(String input, boolean encoded){
+        Term[] array = new Term[input.length()];
+        int array_counter = 0;
+        char symbol = input.charAt(0);
+
+        if(symbol == 'l' && input.charAt(1) == '_'){
+            return stringToTerm(input.substring(2), true);
+        }
+
+        if(input.length() == 1){
+            return new Term(encoded, symbol, 0, null);
+        }
+
+        int braket_counter = 0;
+        int arrity = 1;
+
+        //ARRITY CALCULATOR
+        for (int i = 1; i < input.length(); i++) {
+            if(input.charAt(i) == '('){
+                braket_counter++;
+            } else if (input.charAt(i) == ')') {
+                braket_counter--;
+            } else if (input.charAt(i) == ',' && braket_counter == 1) {
+                arrity++;
+            }
+        }
+
+        if(arrity == 1){
+            return new Term(encoded, symbol, 1, new Term[]{stringToTerm(input.substring(2,input.length() - 1), false)});
+        }
+
+        braket_counter = 0;
+
+        boolean key = true;
+        int tempIndex = 0;
+        for (int i = 1; i < input.length(); i++) {
+            if(input.charAt(i) == '('){
+                if(key){
+                    tempIndex = i+1;
+                    key = false;
+                }
+                braket_counter++;
+
+            } else if(input.charAt(i) == ')'){
+                if(i == input.length() - 1){
+                    array[array_counter] = stringToTerm(input.substring(tempIndex,i), false);
+                    array_counter++;
+                }
+                braket_counter--;
+
+            } else if(input.charAt(i) == ','){
+                if(key){
+                    tempIndex = i+1;
+                    key = false;
+                }else if(braket_counter == 1){
+                    array[array_counter] = stringToTerm(input.substring(tempIndex,i), false);
+                    array_counter++;
+                    tempIndex = i + 1;
+                }
+            }
+        }
+        Term[] result = new Term[arrity];
+
+        for (int i = 0; i < arrity; i++) {
+            result[i] = array[i];
+        }
+        return new Term(encoded, symbol, arrity, result);
+
     }
 
     public boolean LEQ(String pi, String tau){

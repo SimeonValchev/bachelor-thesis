@@ -60,7 +60,7 @@ public class trsProject {
 
             reader = key_2 ? new BufferedReader(new StringReader(example))
                     //SOURCE PATH OF FILE GOES HERE------------v
-                    : new BufferedReader(new FileReader("E:\\stuff\\Programming\\Java\\TRS\\src\\sample.txt"));
+                    : new BufferedReader(new FileReader("src/sample.txt"));
 
             String line = reader.readLine();
 
