@@ -1,9 +1,0 @@
-EXAMPLE FROM MAIL
-f -> g(a,b)
-g(X,X) -> h(X)
-h(b) -> n
-a -> b
-b -> c
-n -> n
-vars
-X

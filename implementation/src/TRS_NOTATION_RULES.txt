@@ -1,7 +1,0 @@
-1. Capital letters are for variables and all variables are capital letters.
-2. Each functions symbol is of type char, so no symbols like 'dbl', 'lin' etc. are allowed.
-3. No 'space' allowed when writing terms.
-4. Rules are explicitly of the form "l -> r" with the 'space' before and after the arrow.
-5. The rules input stops at the line "vars".
-6. Each new line afterwards is a separate variable.
-7. The path to the source file can be changed in the main method at trsProject
