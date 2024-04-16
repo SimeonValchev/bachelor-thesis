@@ -1,0 +1,9 @@
+(VAR X Y Z)
+(RULES
+f(X) -> g(a(X))
+a(X) -> b(X)
+g(b(X)) -> n(X)
+g(a(X)) -> q(X)
+n(s(X)) -> n(X)
+q(s(X)) -> c(n(X),q(X))
+)
