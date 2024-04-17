@@ -296,6 +296,12 @@ public class TRS extends VarsCAP {
                 }
             }
         }
+
+        /*for (Nest nest : aleph) {
+            System.out.println(nest.write());
+        }
+        aleph[-1] = null;
+*/
         return aleph;
     }
 
@@ -330,7 +336,7 @@ public class TRS extends VarsCAP {
                 }
             }
 
-            return !inCharSet(lambda.symbolAtLoc(),sigmaD()) ? 1 + temp_max : temp_max;
+            return inCharSet(lambda.symbolAtLoc(),sigmaD()) ? 1 + temp_max : temp_max;
         }
     }
 
@@ -424,12 +430,12 @@ public class TRS extends VarsCAP {
         return result;
     }
 
-            // not used
+            // uses the new INF_R_2()
     public char[] INF_R_onlychars() {
         char[] res = new char[100];
         int res_counter = 0;
 
-        Location[] source = INF_R();
+        Location[] source = INF_R_2();
         for (Location loc : source) {
             if (loc == null) {
                 continue;

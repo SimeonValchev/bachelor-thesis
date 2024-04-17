@@ -42,7 +42,7 @@ public class Location {
         Integer[] temp = new Integer[right.arrity];
 
         if(right.arrity == 0){
-            return result;
+            return 0;
         }
 
         for (int i = 0; i < right.arrity; i++) {

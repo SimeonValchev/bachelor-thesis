@@ -21,7 +21,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String example = "";
 
-        System.out.println("Type a or b for:\na: Source file path OR\nb: Choose an example 6-10");
+        System.out.println("Type a or b for:\na: TRS from sample.txt OR\nb: Choose an example 6-10");
         String temp_scanner = scanner.nextLine();
         while(!(temp_scanner.equals("a") || temp_scanner.equals("b"))){
             System.out.println("Invalid input! (a/b)");
@@ -102,6 +102,18 @@ public class Main {
             }
         }
 
+        System.out.println("Enable expanded encoding? (y/n)");
+        temp_scanner = scanner.nextLine();
+        while(!(temp_scanner.equals("y") || temp_scanner.equals("n"))){
+            System.out.println("Invalid input! (y/n)");
+            temp_scanner = scanner.nextLine();
+        }
+
+        boolean expandEncoding = false;
+        if(temp_scanner.equals("y")){
+            expandEncoding = true;
+        }
+
         try {
 
             reader = key_2 ? new BufferedReader(new StringReader(example))
@@ -149,27 +161,28 @@ public class Main {
         trs_R.write(true, false, false, false);
         System.out.println();
 
-        /*
-        Location[] infinity = trs_R.INF_R();
-        System.out.println("--- REPEATED NESTING FOUND for SYMBOLS ---");
-        boolean found_any = false;
-        for (Location loc : infinity) {
-            if(loc == null){
-                continue;
+
+        if(expandEncoding) {
+            Location[] infinity = trs_R.INF_R_2();
+            System.out.println("--- REPEATED NESTING FOUND for SYMBOLS ---");
+            boolean found_any = false;
+            for (Location loc : infinity) {
+                if (loc == null) {
+                    continue;
+                }
+                System.out.println(loc.symbolAtLoc() + "  in rule " + loc.getAlpha().write(false) + "  on the " + (loc.left ? "LHS at position " : "RHS at position ") + loc.getPosition());
+                found_any = true;
             }
-            System.out.println(loc.symbolAtLoc() + "  in rule " + loc.getAlpha().write(false) + "  on the " + (loc.left ? "LHS at position " : "RHS at position ") + loc.getPosition());
-            found_any = true;
+            if (!found_any) {
+                System.out.println("None were found");
+            }
         }
-        if(!found_any){
-            System.out.println("None were found");
-        }
-         */
 
         System.out.println();
         System.out.println("--- ENCODING in WST FORMAT ---");
 
-        TRS relative = trs_R.relativeTRS(false);
-        TRS trs_R1 = trs_R.ENCODING(false);
+        TRS relative = trs_R.relativeTRS(expandEncoding);
+        TRS trs_R1 = trs_R.ENCODING(expandEncoding);
         System.out.print("(VAR ");
         for (char ch :
                 getUnion(relative.vars, trs_R.vars)) {
